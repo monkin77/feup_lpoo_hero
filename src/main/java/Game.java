@@ -34,16 +34,16 @@ public class Game {
 
         switch(key.getKeyType()){
             case ArrowUp:
-                this.hero.moveUp();
+                moveHero(this.hero.moveUp());
                 break;
             case ArrowDown:
-                this.hero.moveDown();
+                moveHero(this.hero.moveDown());
                 break;
             case ArrowLeft:
-                this.hero.moveLeft();
+                moveHero(this.hero.moveLeft());
                 break;
             case ArrowRight:
-                this.hero.moveRight();
+                moveHero(this.hero.moveRight());
                 break;
         }
 
@@ -69,5 +69,9 @@ public class Game {
 
             processKey(key);
         }
+    }
+
+    private void moveHero(Position position){
+        this.hero.setPosition(position);
     }
 }
