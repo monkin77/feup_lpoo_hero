@@ -47,10 +47,16 @@ public class Arena {
     }
 
     private boolean canHeroMove(Position position){
-        if(position.getX() < 1 || position.getX() >= this.width-1)  // Don't allow to touch walls
+        if(position.getX() < 0 || position.getX() >= this.width)
             return false;
-        if(position.getY() < 1 || position.getY() >= this.height-1) // Don't allow to touch walls
+        if(position.getY() < 0 || position.getY() >= this.height)
             return false;
+
+        for(Wall wall : this.walls){
+            if(wall.getPosition().equals(position))
+                return false;
+        }
+
         return true;
     }
 

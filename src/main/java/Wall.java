@@ -13,6 +13,10 @@ public class Wall {
     public void draw( TextGraphics graphics){
         graphics.setForegroundColor(TextColor.Factory.fromString("#ffffff"));
         graphics.enableModifiers(SGR.BOLD);
-        graphics.putString(new TerminalPosition(this.position.getX(), this.position.getY()), "X");
+        graphics.putString(new TerminalPosition(this.position.getX(), this.position.getY()), "W");
+    }
+
+    public Position getPosition(){
+        return this.position;
     }
 }
