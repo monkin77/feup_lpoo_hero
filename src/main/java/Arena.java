@@ -1,3 +1,7 @@
+import com.googlecode.lanterna.TerminalPosition;
+import com.googlecode.lanterna.TerminalSize;
+import com.googlecode.lanterna.TextColor;
+import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
@@ -8,10 +12,10 @@ public class Arena {
     private int width, height;
     private Hero hero;
 
-    public Arena(int width, int height, int x, int y){
+    public Arena(int width, int height){
         this.width = width;
         this.height = height;
-        this.hero = new Hero(x, y);
+        this.hero = new Hero(10, 10);
     }
 
     public void processKey( KeyStroke key) throws IOException {
@@ -46,8 +50,10 @@ public class Arena {
         return true;
     }
 
-    public void draw(Screen screen) throws IOException{
-        this.hero.draw(screen);
+    public void draw(TextGraphics graphics) throws IOException{
+        graphics.setBackgroundColor(TextColor.Factory.fromString("#336699"));
+        graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
+        this.hero.draw(graphics);
     }
 
 
