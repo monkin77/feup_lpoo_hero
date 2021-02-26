@@ -9,12 +9,12 @@ import com.googlecode.lanterna.terminal.Terminal;
 
 import java.io.IOException;
 
-public class Game {
+public class Game{
     private Screen screen;
-    private Hero hero;
+    private Arena arena;
 
-    public Game(int x, int y){
-        this.hero = new Hero(x, y);
+    public Game(){
+        this.arena = new Arena(40, 20, 10, 10);
         try {
             TerminalSize terminalSize = new TerminalSize(40, 20);
             DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory().setInitialTerminalSize(terminalSize);
@@ -29,32 +29,13 @@ public class Game {
         }
     }
 
-    private void processKey(com.googlecode.lanterna.input.KeyStroke key) throws IOException {
-        System.out.println(key);
-
-        switch(key.getKeyType()){
-            case ArrowUp:
-                moveHero(this.hero.moveUp());
-                break;
-            case ArrowDown:
-                moveHero(this.hero.moveDown());
-                break;
-            case ArrowLeft:
-                moveHero(this.hero.moveLeft());
-                break;
-            case ArrowRight:
-                moveHero(this.hero.moveRight());
-                break;
-        }
-
-        if(key.getKeyType() == KeyType.Character && key.getCharacter() == 'q'){
-            this.screen.close();
-        }
+    private void processKey(KeyStroke key) throws IOException {
+        this.arena.processKey(key);
     }
 
     private void draw() throws IOException{
         this.screen.clear();
-        this.hero.draw(screen);
+        this.arena.draw(this.screen);
         this.screen.refresh();
     }
 
@@ -64,6 +45,10 @@ public class Game {
 
             KeyStroke key = screen.readInput();
 
+            if(key.getKeyType() == KeyType.Character && key.getCharacter() == 'q'){
+                this.screen.close();
+            }
+
             if(key.getKeyType() == KeyType.EOF)         // if the screen was closed
                 break;
 
@@ -71,7 +56,4 @@ public class Game {
         }
     }
 
-    private void moveHero(Position position){
-        this.hero.setPosition(position);
-    }
 }
