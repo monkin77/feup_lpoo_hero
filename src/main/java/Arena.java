@@ -9,17 +9,20 @@ import com.googlecode.lanterna.screen.Screen;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Arena {
     private int width, height;
     private Hero hero;
     private List<Wall> walls;
+    private List<Coin> coins;
 
     public Arena(int width, int height){
         this.width = width;
         this.height = height;
         this.hero = new Hero(10, 10);
         this.walls = createWalls();
+        this.coins = createCoins();
     }
 
     public void processKey( KeyStroke key) throws IOException {
@@ -57,7 +60,18 @@ public class Arena {
                 return false;
         }
 
+        for(Coin coin : this.coins){
+            if(coin.getPosition().equals(position)){
+                retrieveCoins(coin);
+                return true;
+            }
+        }
+
         return true;
+    }
+
+    private void retrieveCoins(Coin coinToRemove){
+        this.coins.remove(coinToRemove);
     }
 
     public void draw(TextGraphics graphics) throws IOException{
@@ -65,6 +79,8 @@ public class Arena {
         graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
         for(Wall wall : this.walls)
             wall.draw(graphics);
+        for(Coin coin : this.coins)
+            coin.draw(graphics);
         this.hero.draw(graphics);
     }
 
@@ -82,6 +98,29 @@ public class Arena {
         }
 
         return walls;
+    }
+
+    private List<Coin> createCoins(){
+        Random random = new Random();
+        ArrayList<Coin> coins = new ArrayList<>();
+        for(int i = 0; i < 5; i++){
+            while(true){
+                int randomX = random.nextInt(width -2) + 1;
+                int randomY = random.nextInt(height-2) + 1;
+                Position currPos = new Position(randomX, randomY);
+                boolean collided = false;
+                for(int j = 0; j < coins.size(); j++){
+                    if(coins.get(j).position.equals(currPos))
+                        collided = true;
+                }
+                if(!collided){
+                    Coin newCoin = new Coin(randomX, randomY);
+                    coins.add(newCoin);
+                    break;
+                }
+            }
+        }
+        return coins;
     }
 
 }

@@ -10,6 +10,7 @@ public class Wall extends Element{
         super(x, y);     // calls the parent constructor
     }
 
+    @Override
     public void draw( TextGraphics graphics){
         graphics.setForegroundColor(TextColor.Factory.fromString("#ffffff"));
         graphics.enableModifiers(SGR.BOLD);
