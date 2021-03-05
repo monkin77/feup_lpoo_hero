@@ -53,6 +53,11 @@ public class Game{
                 break;
 
             processKey(key);
+
+            if(this.arena.verifyMonsterCollisions()){
+                this.screen.close();
+                System.out.println("You got caught noob");
+            }
         }
     }
 

@@ -16,6 +16,7 @@ public class Arena {
     private Hero hero;
     private List<Wall> walls;
     private List<Coin> coins;
+    private List<Monster> monsters;
 
     public Arena(int width, int height){
         this.width = width;
@@ -23,6 +24,7 @@ public class Arena {
         this.hero = new Hero(10, 10);
         this.walls = createWalls();
         this.coins = createCoins();
+        this.monsters = createMonsters();
     }
 
     public void processKey( KeyStroke key) throws IOException {
@@ -42,6 +44,7 @@ public class Arena {
                 moveHero(this.hero.moveRight());
                 break;
         }
+        this.moveMonsters();
     }
 
     private void moveHero(Position position){
@@ -81,6 +84,8 @@ public class Arena {
             wall.draw(graphics);
         for(Coin coin : this.coins)
             coin.draw(graphics);
+        for(Monster monster : this.monsters)
+            monster.draw(graphics);
         this.hero.draw(graphics);
     }
 
@@ -121,6 +126,78 @@ public class Arena {
             }
         }
         return coins;
+    }
+
+    private List<Monster> createMonsters(){
+        Random random = new Random();
+        ArrayList<Monster> monsters = new ArrayList<>();
+        for(int i = 0; i < 10; i++){
+            while(true){
+                int randomX = random.nextInt(width -2) + 1;
+                int randomY = random.nextInt(height-2) + 1;
+                Position currPos = new Position(randomX, randomY);
+                boolean collided = false;
+                for(int j = 0; j < monsters.size(); j++){
+                    if(monsters.get(j).position.equals(currPos))
+                        collided = true;
+                }
+                if(!collided){
+                    Monster newMonster = new Monster(randomX, randomY);
+                    monsters.add(newMonster);
+                    break;
+                }
+            }
+        }
+        return monsters;
+    }
+
+    private void moveMonsters(){
+        for(Monster monster : this.monsters){
+            while(true){
+                Position newMonsterPos = monster.move();
+                if(canMonsterMove(newMonsterPos)){
+                    monster.setPosition(newMonsterPos);
+                    break;
+                }
+            }
+        }
+    }
+
+    private boolean canMonsterMove(Position position){
+        if(position.getX() < 0 || position.getX() >= this.width)
+            return false;
+        if(position.getY() < 0 || position.getY() >= this.height)
+            return false;
+
+        for(Wall wall : this.walls){
+            if(wall.getPosition().equals(position))
+                return false;
+        }
+
+        for(Coin coin : this.coins){
+            if(coin.getPosition().equals(position))
+                return false;
+        }
+
+        for(Monster monster : this.monsters)
+            if(monster.getPosition().equals(position))
+                return false;
+
+        return true;
+    }
+
+    /**
+     * 
+     * @return true if monster collides with hero
+     */
+    public boolean verifyMonsterCollisions(){
+        // check if monsters touch hero
+        for(Monster monster : this.monsters){
+            if(monster.getPosition().equals(this.hero.getPosition())){
+                return true;
+            }
+        }
+        return false;
     }
 
 }
