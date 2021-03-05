@@ -1,5 +1,6 @@
+
+
 import com.googlecode.lanterna.TerminalSize;
-import com.googlecode.lanterna.TextCharacter;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
@@ -14,7 +15,9 @@ public class Game{
     private Arena arena;
 
     public Game(){
-        this.arena = new Arena(40, 20);
+        //this.arena = new Arena(40, 20);
+        this.arena = new Arena("./src/main/resources/customArena.txt");
+
         try {
             TerminalSize terminalSize = new TerminalSize(40, 20);
             DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory().setInitialTerminalSize(terminalSize);
